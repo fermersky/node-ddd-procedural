@@ -18,13 +18,13 @@ export default function (dbContext: IPgContext): IDriverRepository {
 
   return {
     async getAll(): Promise<Driver[]> {
-      const result = await dbContext.client.query<IDriverQueryResult>('SELECT * FROM DRIVERS');
+      const result = await dbContext.client.query<IDriverQueryResult>('SELECT * FROM drivers');
       return mapToDomain(result.rows);
     },
 
     async findByEmail(email: string): Promise<Driver> {
       const result = await dbContext.client.query<IDriverQueryResult>(
-        'SELECT * FROM DRIVERS WHERE email = $1',
+        'SELECT * FROM drivers WHERE email = $1',
         [email],
       );
 

@@ -1,4 +1,5 @@
-import { IRepository } from '../domain.interface';
+import { IRepository } from '@domain/domain.interface';
+
 import { Driver } from './index';
 
 export interface IDriverRepository extends IRepository<Driver> {
