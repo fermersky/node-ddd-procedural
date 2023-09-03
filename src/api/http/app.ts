@@ -13,6 +13,4 @@ app.addHook('onReady', () => {
   console.dir(appConfig);
 });
 
-app.listen({ port: appConfig.httpPort });
-
 export default app;
