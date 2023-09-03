@@ -1,6 +1,6 @@
 import { FastifyRequest } from 'fastify';
 
-import { Config } from '@infrastructure/config';
+import { AppConfig } from '@infrastructure/config';
 import { IJwtService } from '@infrastructure/crypto';
 
 import { HttpUnauthorized } from '../http.errors';
@@ -12,7 +12,7 @@ export interface IDriverJwtPayload {
 
 interface IJwtHttpServiceDeps {
   jwt: IJwtService;
-  appConfig: Config;
+  appConfig: AppConfig;
 }
 
 export interface IJwtHttpService {
@@ -30,7 +30,7 @@ export default function ({ jwt, appConfig }: IJwtHttpServiceDeps): IJwtHttpServi
           throw new HttpUnauthorized('Token is missing');
         }
 
-        const tokenValid = await jwt.verify(token, appConfig.JWT_SECRET);
+        const tokenValid = await jwt.verify(token, appConfig.jwtSecret);
 
         if (!tokenValid) {
           throw new HttpUnauthorized('Token verification failed');
@@ -45,7 +45,7 @@ export default function ({ jwt, appConfig }: IJwtHttpServiceDeps): IJwtHttpServi
     },
 
     async createToken<T extends IDriverJwtPayload>(payload: T): Promise<string> {
-      const token = await jwt.sign(payload, appConfig.JWT_SECRET, {
+      const token = await jwt.sign(payload, appConfig.jwtSecret, {
         expiresIn: Date.now() + 15 * 60 * 1000,
       });
 

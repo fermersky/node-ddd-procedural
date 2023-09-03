@@ -6,7 +6,7 @@ import { driverController } from '../controller';
 import { ApiHandler } from './handlers';
 
 const logger = console;
-const logging = appConfig.HTTP_LOGGING;
+const logging = appConfig.httpLogging;
 
 export default async function routes(app: FastifyInstance) {
   app.get('/drivers', async (req, res) => {
