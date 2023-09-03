@@ -2,6 +2,7 @@
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   },
+  "exclude": ["jest.config.ts"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 

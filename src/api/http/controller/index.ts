@@ -17,7 +17,12 @@ const bcrypt = bcryptService();
 const jwt = jwtHttpService({ jwt: jwtService(), appConfig });
 
 // domain services
-const driverService = driver({ db, bcrypt });
+// const driverService = driver({ db, bcrypt });
 
 // http controllers
-export const driverController = driverHttpController({ jwt, driverService });
+export const driverController = async () => {
+  const session = await db.connect();
+  const driverService = driver({ db: session, bcrypt });
+
+  return driverHttpController({ jwt, driverService });
+};

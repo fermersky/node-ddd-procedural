@@ -1,10 +1,10 @@
-import { Driver, DriverDoesNotExistError, IDriverRepository } from '@domain/driver';
+import { PoolClient } from 'pg';
 
-import { IPgContext } from '@infrastructure/db/pg/context';
+import { Driver, DriverDoesNotExistError, IDriverRepository } from '@domain/driver';
 
 import { IDriverQueryResult } from './types';
 
-export default function (dbContext: IPgContext): IDriverRepository {
+export default function (client: PoolClient): IDriverRepository {
   const mapToDomain = (rows: IDriverQueryResult[]): Driver[] => {
     return rows.map((row) => ({
       id: row.id,
@@ -18,15 +18,15 @@ export default function (dbContext: IPgContext): IDriverRepository {
 
   return {
     async getAll() {
-      const result = await dbContext.client.query<IDriverQueryResult>('SELECT * FROM drivers');
+      const result = await client.query<IDriverQueryResult>('SELECT * FROM drivers');
+
       return mapToDomain(result.rows);
     },
 
     async findByEmail(email) {
-      const result = await dbContext.client.query<IDriverQueryResult>(
-        'SELECT * FROM drivers WHERE email = $1',
-        [email],
-      );
+      const result = await client.query<IDriverQueryResult>('SELECT * FROM drivers WHERE email = $1', [
+        email,
+      ]);
 
       if (result.rowCount === 0) {
         throw new DriverDoesNotExistError(email);

@@ -24,15 +24,15 @@ export function fromDomain(driver: Driver): GetDriverResponseBody {
   };
 }
 
-const DriverLoginResponseSchema = z.object({
+export const DriverLoginResponseSchema = z.object({
   token: z.string(),
 });
 
 export type DriverLoginResponseBody = z.infer<typeof DriverLoginResponseSchema>;
 
-export const DriverSignInSchema = z.object({
+export const DriverLoginSchema = z.object({
   email: z.string(),
   password: z.string(),
 });
 
-export type DriverSignInRequestBody = z.infer<typeof DriverSignInSchema>;
+export type DriverLoginRequestBody = z.infer<typeof DriverLoginSchema>;

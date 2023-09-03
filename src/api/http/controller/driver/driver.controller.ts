@@ -3,7 +3,7 @@ import { IDriverService } from '@domain/driver';
 import { IDriverJwtPayload, IJwtHttpService } from '@api/http/core/services/jwt-http.service';
 
 import { IDriverController } from './driver.controller.types';
-import { DriverSignInSchema, fromDomain } from './driver.dto';
+import { DriverLoginSchema, fromDomain } from './driver.dto';
 
 interface IDriverControllerDeps {
   driverService: IDriverService;
@@ -29,7 +29,7 @@ export default function ({ driverService, jwt }: IDriverControllerDeps): IDriver
     },
 
     async login(req) {
-      const { email, password } = await DriverSignInSchema.parseAsync(req.body);
+      const { email, password } = await DriverLoginSchema.parseAsync(req.body);
 
       const driver = await driverService.authenticate(email, password);
 
