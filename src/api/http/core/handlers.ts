@@ -3,9 +3,10 @@ import { ZodError, z } from 'zod';
 
 import { DomainError } from '@domain/domain.errors';
 
+import { FastifyRouteHandlerFn } from '../controller/controller.types';
 import { HttpError } from './http.errors';
 
-type FastifyHTTPHandler = (req: FastifyRequest, res: FastifyReply) => Promise<any>;
+type FastifyHTTPHandler = FastifyRouteHandlerFn<object>;
 
 const TryCatchErrors = async (req: FastifyRequest, res: FastifyReply, cb: () => Promise<void>) => {
   try {
@@ -52,7 +53,12 @@ const TryCatchErrors = async (req: FastifyRequest, res: FastifyReply, cb: () => 
 
 const ApiHandlerOptionsSchema = z.object({
   logging: z.boolean().optional().default(false),
-  logger: z.any().optional().default(console),
+  logger: z
+    .object({
+      log: z.function(),
+    })
+    .optional()
+    .default(console),
 });
 
 type ApiHandlerOptions = z.infer<typeof ApiHandlerOptionsSchema>;
@@ -69,10 +75,12 @@ export const ApiHandler =
 
       logging && logger.log(`HTTP => ${new Date().toTimeString()} ${req.method} ${req.url}`);
 
-      const result = await handler(req, res);
+      const { status, body, headers } = await handler(req);
 
       logging && logger.log(`HTTP <= ${new Date().toTimeString()} took 5 sec`);
 
-      res.send(result);
+      if (headers) res.headers(headers);
+
+      res.send(body).status(status);
     });
   };

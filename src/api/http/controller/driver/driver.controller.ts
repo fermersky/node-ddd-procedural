@@ -1,40 +1,34 @@
-import { FastifyRequest } from 'fastify';
-
 import { IDriverService } from '@domain/driver';
 
-import { IDriverJwtPayload, IJwtHttpService } from '../core/services/jwt-http.service';
-import {
-  DriverLoginResponseBody,
-  DriverSignInSchema,
-  GetDriverResponseBody,
-  GetDriversResponseBody,
-  fromDomain,
-} from '../dto/driver.dto';
+import { IDriverJwtPayload, IJwtHttpService } from '@api/http/core/services/jwt-http.service';
+
+import { IDriverController } from './driver.controller.types';
+import { DriverSignInSchema, fromDomain } from './driver.dto';
 
 interface IDriverControllerDeps {
   driverService: IDriverService;
   jwt: IJwtHttpService;
 }
 
-export default function ({ driverService, jwt }: IDriverControllerDeps) {
+export default function ({ driverService, jwt }: IDriverControllerDeps): IDriverController {
   return {
-    async getAll(req: FastifyRequest): Promise<GetDriversResponseBody> {
+    async getAll(req) {
       await jwt.validateRequest<IDriverJwtPayload>(req);
 
       const drivers = await driverService.getAll();
 
-      return drivers.map(fromDomain);
+      return { body: drivers.map(fromDomain), status: 200 };
     },
 
-    async me(req: FastifyRequest): Promise<GetDriverResponseBody> {
+    async me(req) {
       const { email } = await jwt.validateRequest(req);
 
       const driver = await driverService.findByEmail(email);
 
-      return fromDomain(driver);
+      return { body: driver, status: 200 };
     },
 
-    async login(req: FastifyRequest): Promise<DriverLoginResponseBody> {
+    async login(req) {
       const { email, password } = await DriverSignInSchema.parseAsync(req.body);
 
       const driver = await driverService.authenticate(email, password);
@@ -44,7 +38,7 @@ export default function ({ driverService, jwt }: IDriverControllerDeps) {
         email: driver.email,
       });
 
-      return { token };
+      return { body: { token }, status: 200 };
     },
   };
 }

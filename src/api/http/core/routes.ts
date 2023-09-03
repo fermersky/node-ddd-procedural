@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify';
 
 import { appConfig } from '@infrastructure/config';
 
-import { driverController } from '../controllers';
+import { driverController } from '../controller';
 import { ApiHandler } from './handlers';
 
 const logger = console;

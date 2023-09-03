@@ -9,7 +9,7 @@ const EnvSchema = z.object({
 
 export type Config = z.infer<typeof EnvSchema>;
 
-function getConfig(overrides?: any): Config {
+function getConfig(overrides?: Record<string, string>): Config {
   const envs = EnvSchema.parse({
     HTTP_LOGGING: process.env['HTTP_LOGGING'] === 'true' ? true : false,
     JWT_SECRET: process.env['JWT_SECRET'],

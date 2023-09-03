@@ -7,7 +7,7 @@ import context from '@infrastructure/db/pg/context';
 import pool from '@infrastructure/db/pg/pool';
 
 import jwtHttpService from '../core/services/jwt-http.service';
-import driverHttpController from './driver.controller';
+import driverHttpController from './driver/driver.controller';
 
 // infrastructure
 const db = context(pool);
