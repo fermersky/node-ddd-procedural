@@ -2,13 +2,15 @@ import { z } from 'zod';
 
 import { Driver } from '@domain/driver';
 
-const GetDriverSchema = z.object({
+export const GetDriverSchema = z.object({
   id: z.string(),
   email: z.string().email(),
   phone: z.string().optional(),
   first_name: z.string(),
   last_name: z.string(),
 });
+
+export const GetDriversSchema = z.array(GetDriverSchema);
 
 export type GetDriverResponseBody = z.infer<typeof GetDriverSchema>;
 
