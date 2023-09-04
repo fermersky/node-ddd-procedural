@@ -16,13 +16,13 @@ interface IJwtHttpServiceDeps {
 }
 
 export interface IJwtHttpService {
-  validateRequest<T extends IDriverJwtPayload>(req: FastifyRequest): Promise<T>;
-  createToken<T extends IDriverJwtPayload>(payload: T): Promise<string>;
+  validateRequest<T = IDriverJwtPayload>(req: FastifyRequest): Promise<T>;
+  createToken<T extends object>(payload: T): Promise<string>;
 }
 
 export default function ({ jwt, appConfig }: IJwtHttpServiceDeps): IJwtHttpService {
   return {
-    async validateRequest<T extends IDriverJwtPayload>(req: FastifyRequest): Promise<T> {
+    async validateRequest<T = IDriverJwtPayload>(req: FastifyRequest): Promise<T> {
       try {
         const token = req.headers['authorization']?.split(' ')[1];
 
@@ -44,7 +44,7 @@ export default function ({ jwt, appConfig }: IJwtHttpServiceDeps): IJwtHttpServi
       }
     },
 
-    async createToken<T extends IDriverJwtPayload>(payload: T): Promise<string> {
+    async createToken<T extends object>(payload: T): Promise<string> {
       const token = await jwt.sign(payload, appConfig.jwtSecret, {
         expiresIn: Date.now() + 15 * 60 * 1000,
       });

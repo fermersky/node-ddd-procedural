@@ -1,6 +1,6 @@
 import { IDriverService } from '@domain/driver';
 
-import { IDriverJwtPayload, IJwtHttpService } from '@api/http/core/services/jwt-http.service';
+import { IJwtHttpService } from '@api/http/core/services/jwt-http.service';
 
 import { IDriverController } from './driver.controller.types';
 import { DriverLoginSchema, fromDomain } from './driver.dto';
@@ -13,7 +13,7 @@ interface IDriverControllerDeps {
 export default function ({ driverService, jwt }: IDriverControllerDeps): IDriverController {
   return {
     async getAll(req) {
-      await jwt.validateRequest<IDriverJwtPayload>(req);
+      await jwt.validateRequest(req);
 
       const drivers = await driverService.getAll();
 
