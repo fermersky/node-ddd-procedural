@@ -5,7 +5,10 @@ const EnvSchema = z.object({
   HTTP_LOGGING: z.string().default('false'),
   HTTP_PORT: z.coerce.number().default(8000),
   JWT_SECRET: z.string(),
-  NODE_ENV: z.string().default('development'),
+  NODE_ENV: z
+    .string()
+    .regex(/^(development|production|test)$/)
+    .default('development'),
 });
 
 export interface AppConfig {

@@ -6,7 +6,7 @@ const pool = new Pool({
   database: 'best_driver_db',
   user: 'postgres',
   password: '123',
-  max: 20,
+  max: 40,
 });
 
 console.log('connected to Postgres 🔥');

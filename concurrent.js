@@ -1,6 +1,6 @@
 (async () => {
   const promises = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 50; i++) {
     const p = fetch(`http://localhost:8000/driver/login`, {
       method: 'post',
       headers: {
@@ -15,5 +15,5 @@
     promises.push(p);
   }
   const test = await Promise.allSettled(promises);
-  console.log(test.map((r) => console.log(r.value.status)));
+  test.map((r) => console.log(r.value.status));
 })();
