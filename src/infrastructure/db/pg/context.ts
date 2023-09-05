@@ -34,10 +34,13 @@ export default function (pool: Pool): IPgContext {
           return driverRepository(client);
         },
 
-        async withinTransaction<T>(cb: () => Promise<T>): Promise<T> {
+        async withinTransaction<F extends (...params: unknown[]) => ReturnType<F>>(
+          cb: F,
+          ...params: Parameters<F>
+        ): Promise<ReturnType<F>> {
           try {
             await this.begin();
-            const data = await cb();
+            const data = await cb(...params);
             await this.commit();
 
             return data;

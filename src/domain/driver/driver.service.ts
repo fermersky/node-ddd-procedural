@@ -15,7 +15,7 @@ export default function ({ db, bcrypt }: IDriverServiceDeps): IDriverService {
     },
 
     async findByEmail(email: string): Promise<Driver> {
-      const driver = await db.withinTransaction(async () => await db.driverRepository.findByEmail(email));
+      const driver = await db.withinTransaction(db.driverRepository.findByEmail, email);
 
       if (!driver) {
         throw new DriverDoesNotExistError(email);
@@ -25,7 +25,7 @@ export default function ({ db, bcrypt }: IDriverServiceDeps): IDriverService {
     },
 
     async authenticate(email: string, password: string): Promise<Driver> {
-      const driver = await db.withinTransaction(async () => await db.driverRepository.findByEmail(email));
+      const driver = await db.withinTransaction(db.driverRepository.findByEmail, email);
 
       if (driver == null) {
         throw new CouldNotAuthenticateDriver();

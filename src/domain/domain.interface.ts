@@ -9,7 +9,11 @@ export interface IDbContext {
   begin(): Promise<void>;
   commit(): Promise<void>;
   rollback(): Promise<void>;
-  withinTransaction<T>(cb: () => Promise<T>): Promise<T>;
+
+  withinTransaction<F extends (...params: any[]) => ReturnType<F>>(
+    cb: F,
+    ...params: Parameters<F>
+  ): Promise<ReturnType<F>>;
 
   driverRepository: IDriverRepository;
 }
