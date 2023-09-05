@@ -8,6 +8,8 @@ export interface IRepository<T> {
 export interface IDbContext {
   begin(): Promise<void>;
   commit(): Promise<void>;
+  rollback(): Promise<void>;
+  withinTransaction<T>(cb: () => Promise<T>): Promise<T>;
 
   driverRepository: IDriverRepository;
 }

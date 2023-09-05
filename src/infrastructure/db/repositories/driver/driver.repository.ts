@@ -1,10 +1,10 @@
-import { PoolClient } from 'pg';
-
 import { Driver, DriverDoesNotExistError, IDriverRepository } from '@domain/driver';
+
+import { PoolClientDecorator } from '@infrastructure/db/pg/pool-client';
 
 import { IDriverQueryResult } from './types';
 
-export default function (client: PoolClient): IDriverRepository {
+export default function (client: PoolClientDecorator): IDriverRepository {
   const mapToDomain = (rows: IDriverQueryResult[]): Driver[] => {
     return rows.map((row) => ({
       id: row.id,

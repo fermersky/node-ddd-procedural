@@ -11,17 +11,11 @@ interface IDriverServiceDeps {
 export default function ({ db, bcrypt }: IDriverServiceDeps): IDriverService {
   return {
     async getAll(): Promise<Driver[]> {
-      await db.begin();
-      const drivers = await db.driverRepository.getAll();
-      await db.commit();
-
-      return drivers;
+      return await db.withinTransaction(db.driverRepository.getAll);
     },
 
     async findByEmail(email: string): Promise<Driver> {
-      await db.begin();
-      const driver = await db.driverRepository.findByEmail(email);
-      await db.commit();
+      const driver = await db.withinTransaction(async () => await db.driverRepository.findByEmail(email));
 
       if (!driver) {
         throw new DriverDoesNotExistError(email);
@@ -31,9 +25,7 @@ export default function ({ db, bcrypt }: IDriverServiceDeps): IDriverService {
     },
 
     async authenticate(email: string, password: string): Promise<Driver> {
-      await db.begin();
-      const driver = await db.driverRepository.findByEmail(email);
-      await db.commit();
+      const driver = await db.withinTransaction(async () => await db.driverRepository.findByEmail(email));
 
       if (driver == null) {
         throw new CouldNotAuthenticateDriver();
