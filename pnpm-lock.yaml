@@ -55,6 +55,9 @@ devDependencies:
   eslint:
     specifier: ^8.44.0
     version: 8.44.0
+  husky:
+    specifier: ^8.0.3
+    version: 8.0.3
   jest:
     specifier: ^29.6.4
     version: 29.6.4(@types/node@20.4.9)(ts-node@10.9.1)
@@ -3010,6 +3013,15 @@ packages:
         integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==,
       }
     engines: { node: '>=10.17.0' }
+    dev: true
+
+  /husky@8.0.3:
+    resolution:
+      {
+        integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==,
+      }
+    engines: { node: '>=14' }
+    hasBin: true
     dev: true
 
   /ieee754@1.2.1:

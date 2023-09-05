@@ -4,9 +4,9 @@ export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
   verbose: true,
-  // collectCoverage: true,
+  collectCoverage: false,
+  displayName: 'Node.js DDD Sample',
   testRegex: '(/tests/.*|(\\.|/)(test|spec))\\.ts?$',
-  // testRegex: '^/tests/.*(toest|spec)\\.ts$',
   testPathIgnorePatterns: ['/node_modules/', '/src/tests/common.ts'],
   moduleNameMapper: pathsToModuleNameMapper({
     '@domain/*': ['<rootDir>/src/domain/*'],
