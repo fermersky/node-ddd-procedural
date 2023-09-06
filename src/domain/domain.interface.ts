@@ -2,6 +2,7 @@ import { IDriverRepository } from './driver';
 
 export interface IRepository<T> {
   getAll(): Promise<T[]>;
+  getById(id: string): Promise<T>;
   // ...other generic repository methods
 }
 
@@ -10,7 +11,7 @@ export interface IDbContext {
   commit(): Promise<void>;
   rollback(): Promise<void>;
 
-  withinTransaction<F extends (...params: any[]) => ReturnType<F>>(
+  withinTransaction<F extends (...params: Parameters<F>) => ReturnType<F>>(
     cb: F,
     ...params: Parameters<F>
   ): Promise<ReturnType<F>>;

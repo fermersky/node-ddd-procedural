@@ -34,7 +34,7 @@ export default function (pool: Pool): IPgContext {
           return driverRepository(client);
         },
 
-        async withinTransaction<F extends (...params: unknown[]) => ReturnType<F>>(
+        async withinTransaction<F extends (...params: Parameters<F>) => ReturnType<F>>(
           cb: F,
           ...params: Parameters<F>
         ): Promise<ReturnType<F>> {
