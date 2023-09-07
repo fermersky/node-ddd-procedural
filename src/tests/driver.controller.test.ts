@@ -1,4 +1,4 @@
-import pool from '@infrastructure/db/pg/pool';
+import { pool } from '@infrastructure/db/pg';
 
 import app from '@api/http/app';
 import {

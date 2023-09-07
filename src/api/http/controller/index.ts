@@ -2,8 +2,7 @@ import driver from '@domain/driver/driver.service';
 
 import { appConfig } from '@infrastructure/config';
 import { bcryptService, jwtService } from '@infrastructure/crypto';
-import context from '@infrastructure/db/pg/context';
-import pool from '@infrastructure/db/pg/pool';
+import { context, pool } from '@infrastructure/db/pg';
 
 import jwtHttpService from '../core/services/jwt-http.service';
 import driverHttpController from './driver/driver.controller';

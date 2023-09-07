@@ -93,7 +93,6 @@ export const ApiHandler =
         );
 
       if (headers) res.headers(headers);
-      console.log(body);
 
       res.send(body).status(status);
     });

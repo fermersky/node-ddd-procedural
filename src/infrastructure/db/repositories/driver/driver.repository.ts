@@ -1,6 +1,6 @@
 import { Driver, DriverDoesNotExistError, IDriverRepository } from '@domain/driver';
 
-import { PoolClientDecorator } from '@infrastructure/db/pg/pool-client';
+import { PoolClientDecorator } from '@infrastructure/db/pg';
 
 import { IDriverQueryResult } from './types';
 
