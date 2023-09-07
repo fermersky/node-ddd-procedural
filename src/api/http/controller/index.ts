@@ -1,8 +1,7 @@
 import driver from '@domain/driver/driver.service';
 
 import { appConfig } from '@infrastructure/config';
-import bcryptService from '@infrastructure/crypto/bcrypt.service';
-import jwtService from '@infrastructure/crypto/jwt.service';
+import { bcryptService, jwtService } from '@infrastructure/crypto';
 import context from '@infrastructure/db/pg/context';
 import pool from '@infrastructure/db/pg/pool';
 

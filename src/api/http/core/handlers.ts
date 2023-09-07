@@ -3,6 +3,8 @@ import { ZodError, z } from 'zod';
 
 import { DomainError } from '@domain/domain.errors';
 
+import { randomService } from '@infrastructure/crypto';
+
 import { FastifyRouteHandlerFn } from '../controller/controller.types';
 import { HttpError } from './http.errors';
 
@@ -72,14 +74,26 @@ export const ApiHandler =
   async (handler: FastifyHTTPHandler) => {
     await TryCatchErrors(req, res, async () => {
       const { logging, logger } = await ApiHandlerOptionsSchema.parseAsync(options);
+      const requestId = await randomService().requestId();
 
-      logging && logger.log(`HTTP => ${new Date().toTimeString()} ${req.method} ${req.url}`);
+      logging &&
+        logger.log(`HTTP (requestId: ${requestId}) => ${new Date().toTimeString()} ${req.method} ${req.url}`);
+
+      performance.mark(requestId);
+
+      req.id = requestId;
 
       const { status, body, headers } = await handler(req);
 
-      logging && logger.log(`HTTP <= ${new Date().toTimeString()} took 5 sec`);
+      const { duration } = performance.measure('request to Now', requestId);
+
+      logging &&
+        logger.log(
+          `HTTP (requestId: ${requestId}) <= ${new Date().toTimeString()} took ${duration.toFixed(2)} ms`,
+        );
 
       if (headers) res.headers(headers);
+      console.log(body);
 
       res.send(body).status(status);
     });

@@ -16,5 +16,7 @@ export interface IDbContext {
     ...params: Parameters<F>
   ): Promise<ReturnType<F>>;
 
+  transaction<T>(cb: (session: IDbContext) => Promise<T>): Promise<T>;
+
   driverRepository: IDriverRepository;
 }

@@ -1,7 +1,7 @@
 import { CouldNotAuthenticateDriver, Driver, DriverDoesNotExistError, IDriverService } from '@domain/driver';
 import { IDbContext } from '@domain/index';
 
-import { IBcryptService } from '@infrastructure/crypto';
+import { IBcryptService } from '@infrastructure/crypto/bcrypt.service';
 
 interface IDriverServiceDeps {
   db: IDbContext;
@@ -15,7 +15,13 @@ export default function ({ db, bcrypt }: IDriverServiceDeps): IDriverService {
     },
 
     async findByEmail(email: string): Promise<Driver> {
-      const driver = await db.withinTransaction(db.driverRepository.findByEmail, email);
+      const driver = await db.transaction(async (session) => {
+        await session.begin();
+        const driver = await db.driverRepository.findByEmail(email);
+        await session.commit();
+
+        return driver;
+      });
 
       if (!driver) {
         throw new DriverDoesNotExistError(email);

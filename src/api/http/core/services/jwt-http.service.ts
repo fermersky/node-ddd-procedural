@@ -1,7 +1,7 @@
 import { FastifyRequest } from 'fastify';
 
 import { AppConfig } from '@infrastructure/config';
-import { IJwtService } from '@infrastructure/crypto';
+import { IJwtService } from '@infrastructure/crypto/jwt.service';
 
 import { HttpUnauthorized } from '../http.errors';
 
