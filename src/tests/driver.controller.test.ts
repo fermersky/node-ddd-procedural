@@ -44,6 +44,8 @@ describe('Driver controller endpoints tests', () => {
     expect(status).toBe(200);
 
     expect(body).toHaveProperty('id');
+    expect(body).toHaveProperty('email');
+    expect(body.email).toEqual('andrew@mail.com');
   });
 
   test('GET /drivers returns 200 status and all drivers available in the db', async () => {

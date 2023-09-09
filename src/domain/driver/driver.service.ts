@@ -15,8 +15,7 @@ export default function ({ db, bcrypt }: IDriverServiceDeps): IDriverService {
     },
 
     async findByEmail(email: string): Promise<Driver> {
-      const driver = await db.transaction(async (session) => {
-        await session.begin();
+      const driver = await db.beginTransaction(async (session) => {
         const driver = await db.driverRepository.findByEmail(email);
         await session.commit();
 

@@ -33,8 +33,9 @@ export default function (pool: Pool): IPgContext {
         },
 
         // provide all control over the transaction to the client code
-        async transaction<T>(cb: (session: IDbContext) => Promise<T>): Promise<T> {
+        async beginTransaction<T>(cb: (session: IDbContext) => Promise<T>): Promise<T> {
           try {
+            await this.begin();
             const data = await cb(session);
 
             return data;

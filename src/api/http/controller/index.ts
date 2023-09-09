@@ -4,7 +4,7 @@ import { appConfig } from '@infrastructure/config';
 import { bcryptService, jwtService } from '@infrastructure/crypto';
 import { context, pool } from '@infrastructure/db/pg';
 
-import jwtHttpService from '../core/services/jwt-http.service';
+import { jwtHttpService } from '../core/services/';
 import driverHttpController from './driver/driver.controller';
 
 // infrastructure
