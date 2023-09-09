@@ -7,7 +7,7 @@
     "dev:watch": "pnpm tsnd -r tsconfig-paths/register --respawn src/app.ts",
     "dev": "pnpm ts-node src/app.ts",
     "build": "tsc",
-    "prod": "NODE_ENV=production node dist/index.js",
+    "prod": "UV_THREADPOOL_SIZE=128; NODE_ENV=production node dist/index.js",
     "lint": "pnpm eslint ./src",
     "lint:fix": "pnpm prettier . --write",
     "test": "pnpm jest",

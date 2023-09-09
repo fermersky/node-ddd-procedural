@@ -21,7 +21,6 @@ export default function (pool: Pool): IPgContext {
 
         async commit() {
           await client.query('COMMIT;');
-          // console.log({ total: pool.totalCount, waiting: pool.waitingCount, idle: pool.idleCount });
         },
 
         async rollback() {
@@ -36,7 +35,7 @@ export default function (pool: Pool): IPgContext {
         async beginTransaction<T>(cb: (session: IDbContext) => Promise<T>): Promise<T> {
           try {
             await this.begin();
-            const data = await cb(session);
+            const data = await cb(this);
 
             return data;
           } catch (er) {
@@ -44,6 +43,7 @@ export default function (pool: Pool): IPgContext {
             throw new Error('Transactional error');
           } finally {
             client.release();
+            // console.log({ total: pool.totalCount, waiting: pool.waitingCount, idle: pool.idleCount });
           }
         },
 
