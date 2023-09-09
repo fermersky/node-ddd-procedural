@@ -1,12 +1,24 @@
 import * as jwt from 'jsonwebtoken';
 
 export interface IJwtService {
+  /**
+   * **Asynchronously** sign the given payload into a JSON Web Token string
+   * @param payload - Payload to sign, could be an literal, buffer or string
+   * @param secretOrPrivateKey - Either the secret for HMAC algorithms, or the PEM encoded private key for RSA and ECDSA.
+   * @param [options] - Options for the signature
+   */
   sign(
     payload: string | Buffer | object,
     secretOrPrivateKey: jwt.Secret,
     options: jwt.SignOptions,
   ): Promise<string | undefined>;
 
+  /**
+   * Asynchronously verify given token using a secret or a public key to get a decoded token
+   * @param token - JWT string to verify
+   * @param secretOrPublicKey - A string or buffer containing either the secret for HMAC algorithms,
+   * or the PEM encoded public key for RSA and ECDSA. If jwt.verify is called asynchronous,
+   */
   verify(
     token: string,
     secretOrPublicKey: jwt.Secret | jwt.GetPublicKeyOrSecret,
@@ -15,12 +27,6 @@ export interface IJwtService {
 
 export default function (): IJwtService {
   return {
-    /**
-     * **Asynchronously** sign the given payload into a JSON Web Token string
-     * @param payload - Payload to sign, could be an literal, buffer or string
-     * @param secretOrPrivateKey - Either the secret for HMAC algorithms, or the PEM encoded private key for RSA and ECDSA.
-     * @param [options] - Options for the signature
-     */
     async sign(
       payload: string | Buffer | object,
       secretOrPrivateKey: jwt.Secret,
@@ -36,12 +42,7 @@ export default function (): IJwtService {
         });
       });
     },
-    /**
-     * Asynchronously verify given token using a secret or a public key to get a decoded token
-     * @param token - JWT string to verify
-     * @param secretOrPublicKey - A string or buffer containing either the secret for HMAC algorithms,
-     * or the PEM encoded public key for RSA and ECDSA. If jwt.verify is called asynchronous,
-     */
+
     async verify(
       token: string,
       secretOrPublicKey: jwt.Secret | jwt.GetPublicKeyOrSecret,
