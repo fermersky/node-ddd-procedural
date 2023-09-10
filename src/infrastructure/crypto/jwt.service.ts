@@ -27,11 +27,7 @@ export interface IJwtService {
 
 export default function (): IJwtService {
   return {
-    async sign(
-      payload: string | Buffer | object,
-      secretOrPrivateKey: jwt.Secret,
-      options: jwt.SignOptions,
-    ): Promise<string | undefined> {
+    async sign(payload, secretOrPrivateKey, options) {
       return new Promise((resolve, reject) => {
         jwt.sign(payload, secretOrPrivateKey, options, (error, encoded) => {
           if (error) {
@@ -43,10 +39,7 @@ export default function (): IJwtService {
       });
     },
 
-    async verify(
-      token: string,
-      secretOrPublicKey: jwt.Secret | jwt.GetPublicKeyOrSecret,
-    ): Promise<string | jwt.JwtPayload | undefined> {
+    async verify(token, secretOrPublicKey) {
       return new Promise((resolve, reject) => {
         jwt.verify(token, secretOrPublicKey, (error, encoded) => {
           if (error) {

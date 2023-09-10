@@ -14,7 +14,7 @@ export default function (pool: Pool): IPgContext {
     async connect() {
       const client = new PoolClientDecorator(await pool.connect(), { logQueries: true });
 
-      const session = {
+      const session: IDbContext = {
         async begin() {
           await client.query('BEGIN;');
         },
@@ -31,8 +31,8 @@ export default function (pool: Pool): IPgContext {
           return driverRepository(client);
         },
 
-        // provide all control over the transaction to the client code
-        async beginTransaction<T>(cb: (session: IDbContext) => Promise<T>): Promise<T> {
+        // provide control over the transaction (commit/rollback) to the client code
+        async beginTransaction(cb) {
           try {
             await this.begin();
             const data = await cb(this);
@@ -48,10 +48,7 @@ export default function (pool: Pool): IPgContext {
         },
 
         // automatically runs begin, commit or rollback
-        async withinTransaction<F extends (...params: Parameters<F>) => ReturnType<F>>(
-          cb: F,
-          ...params: Parameters<F>
-        ): Promise<ReturnType<F>> {
+        async withinTransaction(cb, ...params) {
           try {
             await this.begin();
             const data = await cb(...params);

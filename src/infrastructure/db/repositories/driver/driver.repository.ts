@@ -23,7 +23,7 @@ export default function (client: PoolClientDecorator): IDriverRepository {
       return mapToDomain(result.rows);
     },
 
-    async getById(id: string) {
+    async getById(id) {
       const result = await client.query<IDriverQueryResult>('SELECT * FROM drivers where id = $1', [id]);
 
       if (result.rowCount === 0) {

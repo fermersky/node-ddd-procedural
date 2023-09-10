@@ -22,7 +22,7 @@ export interface IJwtHttpService {
 
 export default function ({ jwt, appConfig }: IJwtHttpServiceDeps): IJwtHttpService {
   return {
-    async validateRequest<T = IDriverJwtPayload>(req: FastifyRequest): Promise<T> {
+    async validateRequest<T>(req: FastifyRequest): Promise<T> {
       try {
         const token = req.headers['authorization']?.split(' ')[1];
 
@@ -44,7 +44,7 @@ export default function ({ jwt, appConfig }: IJwtHttpServiceDeps): IJwtHttpServi
       }
     },
 
-    async createToken<T extends object>(payload: T): Promise<string> {
+    async createToken(payload) {
       const token = await jwt.sign(payload, appConfig.jwtSecret, {
         expiresIn: Date.now() + 15 * 60 * 1000,
       });

@@ -6,7 +6,7 @@ export interface IBcryptService {
 
 export default function (): IBcryptService {
   return {
-    async compare(password: string | Buffer, hash: string): Promise<boolean> {
+    async compare(password, hash) {
       return new Promise((resolve, reject) => {
         bcrypt.compare(password, hash, (err, same) => {
           if (err) {
