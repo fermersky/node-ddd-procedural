@@ -75,9 +75,12 @@ export const ApiHandler =
     await TryCatchErrors(req, res, async () => {
       const { logging, logger } = await ApiHandlerOptionsSchema.parseAsync(options);
       const requestId = await randomService().requestId();
+      const now = new Date().toTimeString();
 
-      logging &&
-        logger.log(`HTTP (requestId: ${requestId}) => ${new Date().toTimeString()} ${req.method} ${req.url}`);
+      if (logging) {
+        const msg = `HTTP ${req.method} ${req.url} (requestId: ${requestId}) => ${now} ${req.method} ${req.url}`;
+        logger.log(msg);
+      }
 
       performance.mark(requestId);
 
@@ -85,12 +88,11 @@ export const ApiHandler =
 
       const { status, body, headers } = await handler(req);
 
-      const { duration } = performance.measure('request to Now', requestId);
+      const took = performance.measure('request to Now', requestId).duration.toFixed(2);
 
-      logging &&
-        logger.log(
-          `HTTP (requestId: ${requestId}) <= ${new Date().toTimeString()} took ${duration.toFixed(2)} ms`,
-        );
+      if (logging) {
+        logger.log(`HTTP (requestId: ${requestId}) <= ${new Date().toTimeString()} took ${took} ms`);
+      }
 
       if (headers) res.headers(headers);
 
