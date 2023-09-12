@@ -9,7 +9,7 @@ const app = fastify();
 app.register(routes);
 
 app.addHook('onReady', (done) => {
-  console.log(`server is running on port ${appConfig.httpPort} 🚀`);
+  console.log(`HTTP server is running on port ${appConfig.httpPort} 🚀`);
   console.dir(appConfig);
 
   done();

@@ -1,6 +1,6 @@
 import { HttpRequest, HttpResponse, WebSocket, us_socket_context_t } from 'uWebSockets.js';
 
-import { UserData } from './session.manager';
+import { UserData } from '../session.manager';
 
 export type openHandler = (ws: WebSocket<UserData>) => void;
 

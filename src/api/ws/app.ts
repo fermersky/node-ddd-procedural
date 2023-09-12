@@ -1,6 +1,6 @@
 import uWS from 'uWebSockets.js';
 
-import { handlers } from './core/lifecycle.handlers';
+import { handlers } from './core/handlers/handlers';
 
 const app = uWS
   .App({})

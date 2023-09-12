@@ -1,6 +1,8 @@
-import { WsHandlers } from './lifecycle.handlers.types';
-import { jwtWsService } from './services';
-import sessionManager, { UserData } from './session.manager';
+import { handleMessage } from '../routes/routes';
+import { WsMessage, WsMessageSchema } from '../routes/routes.types';
+import { jwtWsService } from '../services';
+import sessionManager, { UserData } from '../session.manager';
+import { WsHandlers } from './handlers.types';
 
 export const handlers: WsHandlers = {
   open: (ws) => {
@@ -10,9 +12,18 @@ export const handlers: WsHandlers = {
     console.log(`Established new WS connection ${id}`);
   },
 
-  message: (ws, message, isBinary) => {
-    console.log(JSON.parse(new TextDecoder('utf8').decode(message)));
-    const ok = ws.send(message, isBinary);
+  message: async (ws, message, isBinary) => {
+    try {
+      const messageJson = JSON.parse(new TextDecoder('utf8').decode(message)) as WsMessage;
+      await WsMessageSchema.parseAsync(messageJson);
+
+      const result = await handleMessage(messageJson);
+
+      ws.send(JSON.stringify(result), isBinary);
+    } catch (er) {
+      ws.send('Error');
+      console.log(er);
+    }
   },
 
   drain: (ws) => {
@@ -20,10 +31,10 @@ export const handlers: WsHandlers = {
   },
 
   close: (ws, code, message) => {
-    console.log('WebSocket closed');
+    const { id } = ws.getUserData();
+    sessionManager.delete(id);
 
-    const address = new TextDecoder('utf8').decode(ws.getRemoteAddressAsText());
-    sessionManager.delete(address);
+    console.log(`WebSocket closed, Goodbye ${id}`);
   },
 
   upgrade: async (res, req, context) => {
