@@ -23,6 +23,7 @@
     "jsonwebtoken": "^9.0.1",
     "module-alias": "^2.2.3",
     "pg": "^8.11.2",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.31.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {

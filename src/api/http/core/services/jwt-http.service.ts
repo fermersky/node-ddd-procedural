@@ -1,18 +1,11 @@
 import { FastifyRequest } from 'fastify';
 
-import { AppConfig } from '@infrastructure/config';
-import { IJwtService } from '@infrastructure/crypto/jwt.service';
+import { IDriverJwtPayload, IJwtValidationService } from '@api/shared/services/jwt-validation.service';
 
 import { HttpUnauthorized } from '../http.errors';
 
-export interface IDriverJwtPayload {
-  email: string;
-  id: string;
-}
-
 interface IJwtHttpServiceDeps {
-  jwt: IJwtService;
-  appConfig: AppConfig;
+  jwt: IJwtValidationService;
 }
 
 export interface IJwtHttpService {
@@ -20,7 +13,7 @@ export interface IJwtHttpService {
   createToken<T extends object>(payload: T): Promise<string>;
 }
 
-export default function ({ jwt, appConfig }: IJwtHttpServiceDeps): IJwtHttpService {
+export default function jwtHttpService({ jwt }: IJwtHttpServiceDeps): IJwtHttpService {
   return {
     async validateRequest<T>(req: FastifyRequest): Promise<T> {
       try {
@@ -30,11 +23,7 @@ export default function ({ jwt, appConfig }: IJwtHttpServiceDeps): IJwtHttpServi
           throw new HttpUnauthorized('Token is missing');
         }
 
-        const tokenValid = await jwt.verify(token, appConfig.jwtSecret);
-
-        if (!tokenValid) {
-          throw new HttpUnauthorized('Token verification failed');
-        }
+        const tokenValid = await jwt.validateToken(token);
 
         return tokenValid as T;
       } catch (error) {
@@ -45,11 +34,7 @@ export default function ({ jwt, appConfig }: IJwtHttpServiceDeps): IJwtHttpServi
     },
 
     async createToken(payload) {
-      const token = await jwt.sign(payload, appConfig.jwtSecret, {
-        expiresIn: Date.now() + 15 * 60 * 1000,
-      });
-
-      return token as string;
+      return await jwt.createToken(payload);
     },
   };
 }

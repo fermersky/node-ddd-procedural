@@ -4,6 +4,7 @@ import { z } from 'zod';
 const EnvSchema = z.object({
   HTTP_LOGGING: z.string().default('false'),
   HTTP_PORT: z.coerce.number().default(8000),
+  WS_PORT: z.coerce.number().default(8001),
   JWT_SECRET: z.string(),
   NODE_ENV: z
     .string()
@@ -14,6 +15,7 @@ const EnvSchema = z.object({
 export interface AppConfig {
   httpLogging: boolean;
   httpPort: number;
+  wsPort: number;
   jwtSecret: string;
   nodeEnv: string;
 }
@@ -24,6 +26,7 @@ function getConfig(): AppConfig {
   return {
     httpLogging: envs.HTTP_LOGGING === 'true' ? true : false,
     httpPort: Number(envs.HTTP_PORT),
+    wsPort: Number(envs.WS_PORT),
     nodeEnv: envs.NODE_ENV,
 
     // secret envs should be wrapped by getters not to show them when do `console.log(config)`

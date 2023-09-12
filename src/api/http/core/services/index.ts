@@ -1,3 +1,5 @@
-import jwtHttpService from './jwt-http.service';
+import { jwtValidationService } from '@api/shared/services';
 
-export { jwtHttpService };
+import jwtHttp from './jwt-http.service';
+
+export const jwtHttpService = jwtHttp({ jwt: jwtValidationService });
