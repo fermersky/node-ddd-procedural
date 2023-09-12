@@ -1,4 +1,5 @@
-import { CouldNotAuthenticateDriver, DriverDoesNotExistError, IDriverService } from '@domain/driver';
+import { CouldNotAuthenticateDriver, DriverDoesNotExistError } from '@domain/driver/driver.errors';
+import { IDriverService } from '@domain/driver/driver.interface';
 import { IDbContext } from '@domain/index';
 
 import { IBcryptService } from '@infrastructure/crypto/bcrypt.service';

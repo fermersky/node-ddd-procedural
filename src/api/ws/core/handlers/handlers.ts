@@ -1,5 +1,5 @@
 import { handleMessage } from '../routes/routes';
-import { WsMessage, WsMessageSchema } from '../routes/routes.types';
+import { IWsMessage, WsMessageSchema } from '../routes/routes.types';
 import { jwtWsService } from '../services';
 import sessionManager, { UserData } from '../session.manager';
 import { WsHandlers } from './handlers.types';
@@ -14,14 +14,14 @@ export const handlers: WsHandlers = {
 
   message: async (ws, message, isBinary) => {
     try {
-      const messageJson = JSON.parse(new TextDecoder('utf8').decode(message)) as WsMessage;
+      const messageJson = JSON.parse(new TextDecoder('utf8').decode(message)) as IWsMessage;
       await WsMessageSchema.parseAsync(messageJson);
 
       const result = await handleMessage(messageJson);
 
       ws.send(JSON.stringify(result), isBinary);
     } catch (er) {
-      ws.send('Error');
+      ws.send(JSON.stringify({ error: 400 }));
       console.log(er);
     }
   },
@@ -39,6 +39,7 @@ export const handlers: WsHandlers = {
 
   upgrade: async (res, req, context) => {
     console.log('An Http connection wants to become WebSocket, URL: ' + req.getUrl() + '!');
+
     const upgradeAborted = { aborted: false };
 
     const secWebSocketKey = req.getHeader('sec-websocket-key');
@@ -46,7 +47,6 @@ export const handlers: WsHandlers = {
     const secWebSocketExtensions = req.getHeader('sec-websocket-extensions');
 
     res.onAborted(() => {
-      /* We can simply signal that we were aborted */
       upgradeAborted.aborted = true;
     });
 

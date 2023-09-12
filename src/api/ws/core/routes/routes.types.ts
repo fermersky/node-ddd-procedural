@@ -9,10 +9,18 @@ export const WsMessageSchema = z.object({
 
 export type WsQuery = keyof typeof routes;
 
-export interface WsMessage {
+export interface IWsMessage {
   params: any;
   query: WsQuery;
 }
+
+export interface IWsHandlerResult<TSchema> {
+  status: number;
+  data: TSchema;
+  event: WsQuery;
+}
+
+export type WsHandlerResult<T> = Promise<IWsHandlerResult<T>>;
 
 export const GetAllDriversParamsSchema = z.object({
   skip: z.number().default(0),
