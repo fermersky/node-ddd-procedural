@@ -1,5 +1,5 @@
+import { IWsIncomingMessage, WsMessageSchema } from '../routes/driver/driver.routes.types';
 import { handleMessage } from '../routes/routes';
-import { IWsMessage, WsMessageSchema } from '../routes/routes.types';
 import { jwtWsService } from '../services';
 import sessionManager, { UserData } from '../session.manager';
 import { WsHandlers } from './handlers.types';
@@ -14,7 +14,8 @@ export const handlers: WsHandlers = {
 
   message: async (ws, message, isBinary) => {
     try {
-      const messageJson = JSON.parse(new TextDecoder('utf8').decode(message)) as IWsMessage;
+      const messageJson = JSON.parse(new TextDecoder('utf8').decode(message)) as IWsIncomingMessage;
+
       await WsMessageSchema.parseAsync(messageJson);
 
       const result = await handleMessage(messageJson);
