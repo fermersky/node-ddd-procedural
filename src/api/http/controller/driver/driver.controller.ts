@@ -25,7 +25,7 @@ export default function ({ driverService, jwt }: IDriverControllerDeps): IDriver
 
       const driver = await driverService.findByEmail(email);
 
-      return { body: driver, status: 200 };
+      return { body: fromDomain(driver), status: 200 };
     },
 
     async login(req) {

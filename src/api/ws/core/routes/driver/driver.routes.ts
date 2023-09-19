@@ -1,5 +1,10 @@
 import { jwtWsService } from '../../services';
-import { DriverLoginSchema, GetAllDriversParamsSchema, IWsDriverRouteHandlers } from './driver.routes.types';
+import {
+  DriverLoginSchema,
+  GetAllDriversParamsSchema,
+  IWsDriverRouteHandlers,
+  fromDomain,
+} from './driver.routes.types';
 
 export const driverRoutes: IWsDriverRouteHandlers = {
   getAllDrivers: async (params, { driverService }) => {
@@ -7,7 +12,7 @@ export const driverRoutes: IWsDriverRouteHandlers = {
 
     const drivers = await driverService.getAll();
 
-    return { data: drivers, status: 200, event: 'getAllDrivers' };
+    return { data: drivers.map(fromDomain), status: 200, event: 'getAllDrivers' };
   },
 
   login: async (params, { driverService }) => {

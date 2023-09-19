@@ -1,26 +1,20 @@
-import { Driver, DriverDoesNotExistError, IDriverRepository } from '@domain/driver';
+import { DriverDoesNotExistError, IDriverRepository } from '@domain/driver';
 
 import { PoolClientDecorator } from '@infrastructure/db/pg';
 
-import { IDriverQueryResult } from './types';
+import {
+  IDriverQueryResult,
+  IDriverWorkShiftsQueryResult,
+  mapDriverToDomain,
+  mapDriversWorkShiftsToDomain,
+} from './types';
 
 export default function (client: PoolClientDecorator): IDriverRepository {
-  const mapToDomain = (rows: IDriverQueryResult[]): Driver[] => {
-    return rows.map((row) => ({
-      id: row.id,
-      password: row.password,
-      email: row.email,
-      phone: row.phone,
-      first_name: row.first_name,
-      last_name: row.last_name,
-    }));
-  };
-
   return {
     async getAll() {
       const result = await client.query<IDriverQueryResult>('SELECT * FROM drivers');
 
-      return mapToDomain(result.rows);
+      return result.rows.map(mapDriverToDomain);
     },
 
     async getById(id) {
@@ -30,19 +24,20 @@ export default function (client: PoolClientDecorator): IDriverRepository {
         throw new DriverDoesNotExistError(id);
       }
 
-      return mapToDomain(result.rows)[0];
+      return mapDriverToDomain(result.rows[0]);
     },
 
     async findByEmail(email) {
-      const result = await client.query<IDriverQueryResult>('SELECT * FROM drivers WHERE email = $1', [
-        email,
-      ]);
+      const result = await client.query<IDriverWorkShiftsQueryResult>(
+        'SELECT ws.id as work_shift_id, ws.*, d.* FROM drivers d LEFT JOIN work_shifts ws on ws.driver_id = d.id WHERE email = $1 ',
+        [email],
+      );
 
       if (result.rowCount === 0) {
         throw new DriverDoesNotExistError(email);
       }
 
-      return mapToDomain(result.rows)[0];
+      return mapDriversWorkShiftsToDomain(result.rows)[0];
     },
   };
 }

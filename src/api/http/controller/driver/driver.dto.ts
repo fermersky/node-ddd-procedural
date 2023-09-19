@@ -6,8 +6,17 @@ export const GetDriverSchema = z.object({
   id: z.string(),
   email: z.string().email(),
   phone: z.string().optional(),
-  first_name: z.string(),
-  last_name: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  workShifts: z
+    .array(
+      z.object({
+        id: z.string(),
+        start: z.string(),
+        end: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 export const GetDriversSchema = z.array(GetDriverSchema);
@@ -17,12 +26,23 @@ export type GetDriverResponseBody = z.infer<typeof GetDriverSchema>;
 export type GetDriversResponseBody = GetDriverResponseBody[];
 
 export function fromDomain(driver: Driver): GetDriverResponseBody {
+  let workShifts = undefined;
+
+  if (driver.workShifts) {
+    workShifts = driver.workShifts.map((ws) => ({
+      id: ws.id,
+      start: ws.start,
+      end: ws.end,
+      driverId: ws.driverId,
+    }));
+  }
   return {
     id: driver.id,
-    first_name: driver.first_name,
-    last_name: driver.last_name,
+    firstName: driver.firstName,
+    lastName: driver.lastName,
     email: driver.email,
     phone: driver.phone,
+    workShifts,
   };
 }
 

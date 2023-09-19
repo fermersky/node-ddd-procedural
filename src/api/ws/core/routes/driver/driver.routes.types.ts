@@ -46,7 +46,7 @@ export type WsLoginHandler = (
 export type WsGetAllDriversHandler = (
   params: GetAllDriversParams,
   deps: IWsHandlerDeps,
-) => WsHandlerResult<Driver[], 'getAllDrivers'>;
+) => WsHandlerResult<GetDriverResult[], 'getAllDrivers'>;
 
 export interface IWsDriverRouteHandlers {
   login: WsLoginHandler;
@@ -58,3 +58,45 @@ export interface IWsWorkShiftRouteHandlers {
 }
 
 export type WsQuery = keyof IWsDriverRouteHandlers | keyof IWsWorkShiftRouteHandlers;
+
+export const GetDriverSchema = z.object({
+  id: z.string(),
+  email: z.string().email(),
+  phone: z.string().optional(),
+  firstName: z.string(),
+  lastName: z.string(),
+  workShifts: z
+    .array(
+      z.object({
+        id: z.string(),
+        start: z.string(),
+        end: z.string(),
+      }),
+    )
+    .optional(),
+});
+
+export const GetDriversSchema = z.array(GetDriverSchema);
+
+export type GetDriverResult = z.infer<typeof GetDriverSchema>;
+
+export function fromDomain(driver: Driver): GetDriverResult {
+  let workShifts = undefined;
+
+  if (driver.workShifts) {
+    workShifts = driver.workShifts.map((ws) => ({
+      id: ws.id,
+      start: ws.start,
+      end: ws.end,
+      driverId: ws.driverId,
+    }));
+  }
+  return {
+    id: driver.id,
+    firstName: driver.firstName,
+    lastName: driver.lastName,
+    email: driver.email,
+    phone: driver.phone,
+    workShifts,
+  };
+}
