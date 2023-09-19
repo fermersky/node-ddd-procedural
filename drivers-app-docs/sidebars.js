@@ -31,6 +31,11 @@ const sidebars = {
               href: '/#get-all-drivers',
               label: 'Get all drivers',
             },
+            {
+              type: 'link',
+              href: '/#get-me-driver',
+              label: 'Get me (Driver)',
+            },
           ],
         },
         {

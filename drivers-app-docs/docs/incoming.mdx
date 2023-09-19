@@ -39,6 +39,8 @@ a _request-response_ way.
 
 ## Get all drivers
 
+Get all available drivers in the database. Supports pagination.
+
 ```json
 {
   "query": "getAllDrivers",
@@ -73,6 +75,53 @@ a _request-response_ way.
   ],
   "status": 200,
   "event": "getAllDrivers"
+}
+```
+
+## Get me (driver)
+
+Get driver data and his workshifts by email obtained from the JWT payload.<br/>
+HTTP `/login` endpoint is used for recieving credentials.
+{/* TODO: create docs for http get /login */}
+{/* TODO: describe in docs how to connect to WS with jwt in headers */}
+
+```json
+{
+  "query": "me",
+  "params": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI[...]d3jdkJlbWFp"
+  }
+}
+```
+
+> _param **token** of type `String` - JWT authorization token used to establish WS connection._
+
+#### Example output:
+
+```json
+{
+  "data": {
+    "id": "9495f3b5-4075-4c47-9919-e7bc45da171d",
+    "firstName": "Andrew",
+    "lastName": "Udot",
+    "email": "andrew@mail.com",
+    "workShifts": [
+      {
+        "id": "11a4a223-7269-46a6-bef6-8b5bf20b8e3e",
+        "start": "2023-01-24T22:00:00.000Z",
+        "end": "2024-12-25T21:59:59.000Z",
+        "driverId": "9495f3b5-4075-4c47-9919-e7bc45da171d"
+      },
+      {
+        "id": "e2555780-d8cf-49a6-aa38-b8efa79d91a7",
+        "start": "2023-01-24T22:00:00.000Z",
+        "end": "2024-12-25T21:59:59.000Z",
+        "driverId": "9495f3b5-4075-4c47-9919-e7bc45da171d"
+      }
+    ]
+  },
+  "status": 200,
+  "event": "me"
 }
 ```
 

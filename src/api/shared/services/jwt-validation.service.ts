@@ -20,13 +20,13 @@ export default function ({ jwt, appConfig }: IJwtValidationServiceDeps): IJwtVal
   return {
     async validateToken<T>(token: string): Promise<T> {
       try {
-        const tokenValid = await jwt.verify(token, appConfig.jwtSecret);
+        const tokenValid = await jwt.verify<T>(token, appConfig.jwtSecret);
 
         if (!tokenValid) {
           throw new Error('Token verification failed');
         }
 
-        return tokenValid as T;
+        return tokenValid;
       } catch (error) {
         console.log(error);
 

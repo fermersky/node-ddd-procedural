@@ -19,10 +19,7 @@ export interface IJwtService {
    * @param secretOrPublicKey - A string or buffer containing either the secret for HMAC algorithms,
    * or the PEM encoded public key for RSA and ECDSA. If jwt.verify is called asynchronous,
    */
-  verify(
-    token: string,
-    secretOrPublicKey: jwt.Secret | jwt.GetPublicKeyOrSecret,
-  ): Promise<string | jwt.JwtPayload | undefined>;
+  verify<T>(token: string, secretOrPublicKey: jwt.Secret | jwt.GetPublicKeyOrSecret): Promise<T>;
 }
 
 export default function (): IJwtService {
@@ -39,14 +36,14 @@ export default function (): IJwtService {
       });
     },
 
-    async verify(token, secretOrPublicKey) {
+    async verify<T>(token: string, secretOrPublicKey: jwt.Secret | jwt.GetPublicKeyOrSecret): Promise<T> {
       return new Promise((resolve, reject) => {
         jwt.verify(token, secretOrPublicKey, (error, encoded) => {
           if (error) {
             reject(error);
           }
 
-          resolve(encoded);
+          resolve(encoded as T);
         });
       });
     },

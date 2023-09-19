@@ -21,9 +21,9 @@ export default function ({ jwt }: IJwtWsServiceDeps): IJwtHttpService {
           throw new Error('Token is missing');
         }
 
-        const tokenValid = await jwt.validateToken(token);
+        const tokenValid = await jwt.validateToken<T>(token);
 
-        return tokenValid as T;
+        return tokenValid;
       } catch (error) {
         console.log(error);
 

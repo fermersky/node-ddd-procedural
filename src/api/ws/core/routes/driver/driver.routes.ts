@@ -1,6 +1,9 @@
+import { IDriverJwtPayload } from '@api/shared/services';
+
 import { jwtWsService } from '../../services';
 import {
   DriverLoginSchema,
+  DriverMeSchema,
   GetAllDriversParamsSchema,
   IWsDriverRouteHandlers,
   fromDomain,
@@ -26,5 +29,14 @@ export const driverRoutes: IWsDriverRouteHandlers = {
     });
 
     return { data: { token }, status: 200, event: 'login' };
+  },
+
+  me: async (params, { driverService, jwt, appConfig }) => {
+    await DriverMeSchema.parseAsync(params);
+
+    const { email } = await jwt.verify<IDriverJwtPayload>(params.token, appConfig.jwtSecret);
+    const driver = await driverService.findByEmail(email);
+
+    return { data: fromDomain(driver), status: 200, event: 'me' };
   },
 };

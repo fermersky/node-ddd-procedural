@@ -2,6 +2,9 @@ import { z } from 'zod';
 
 import { Driver, IDriverService } from '@domain/driver';
 
+import { AppConfig } from '@infrastructure/config';
+import { IJwtService } from '@infrastructure/crypto/jwt.service';
+
 export const WsMessageSchema = z.object({
   query: z.string(),
   params: z.any(),
@@ -29,6 +32,8 @@ export type GetAllDriversParams = z.infer<typeof GetAllDriversParamsSchema>;
 
 export interface IWsHandlerDeps {
   driverService: IDriverService;
+  jwt: IJwtService;
+  appConfig: AppConfig;
 }
 
 export const DriverLoginSchema = z.object({
@@ -37,6 +42,12 @@ export const DriverLoginSchema = z.object({
 });
 
 export type DriverLoginParams = z.infer<typeof DriverLoginSchema>;
+
+export const DriverMeSchema = z.object({
+  token: z.string(),
+});
+
+export type DriverMeParams = z.infer<typeof DriverMeSchema>;
 
 export type WsLoginHandler = (
   params: DriverLoginParams,
@@ -48,9 +59,15 @@ export type WsGetAllDriversHandler = (
   deps: IWsHandlerDeps,
 ) => WsHandlerResult<GetDriverResult[], 'getAllDrivers'>;
 
+export type WsMeHandler = (
+  params: DriverMeParams,
+  deps: IWsHandlerDeps,
+) => WsHandlerResult<GetDriverResult, 'me'>;
+
 export interface IWsDriverRouteHandlers {
   login: WsLoginHandler;
   getAllDrivers: WsGetAllDriversHandler;
+  me: WsMeHandler;
 }
 
 export interface IWsWorkShiftRouteHandlers {
