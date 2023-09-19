@@ -1,0 +1,93 @@
+---
+sidebar_position: 1
+slug: /
+---
+
+# Incoming WebSocket events
+
+The list below represents available requests payload. All events have common incoming and outgoing
+body structure.
+
+This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
+
+Incoming body structure looks like:
+
+```json
+{
+  "query": "<event name>",
+  "params": {} // could be optional as not all events require parameters
+}
+```
+
+Outgoing:
+
+```json
+{
+  "event": "<event name>",
+  "data": {},
+  "status": 200 // HTTP status
+}
+```
+
+:::note Note
+
+**Incoming** parameter `"query"` and **outgoing** `"event"` will have the **same** value when they are paired in
+a _request-response_ way.
+
+:::
+
+**Available events are**
+[getAllDrivers](/#get-all-drivers),
+
+## Get all drivers
+
+```json
+{
+  "query": "getAllDrivers",
+  "params": {
+    "take": 5,
+    "skip": 0
+  }
+}
+```
+
+> _param **take** of type `Number` - size of the array of drivers._ <br/> _param **skip** of type `Number` - count of records to skip._
+
+Example output:
+
+```json
+{
+  "data": [
+    {
+      "id": "9495f3b5-4075-4c47-9919-e7bc45da171d",
+      "firstName": "Andrew",
+      "lastName": "Udot",
+      "email": "andrew@mail.com",
+      "phone": "5434582370"
+    },
+    {
+      "id": "ecb27677-a614-464e-bd37-56000e59451e",
+      "firstName": "Jonas",
+      "lastName": "Bohman Sr.",
+      "email": "jonas4@gmail.com",
+      "phone": "001-716-571-9420x587"
+    }
+  ],
+  "status": 200,
+  "event": "getAllDrivers"
+}
+```
+
+export const Highlight = ({children, color}) => (
+  <span
+    style={{
+      backgroundColor: color,
+      borderRadius: '5px',
+      color: '#fff',
+      padding: '5px',
+      cursor: 'pointer',
+    }}
+   > 
+    {children}
+  </span>
+);
