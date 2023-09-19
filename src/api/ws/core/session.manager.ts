@@ -1,4 +1,4 @@
-import { WebSocket } from 'uWebSockets.js';
+import { RecognizedString, WebSocket } from 'uWebSockets.js';
 
 export interface UserData {
   id: string;
@@ -14,6 +14,15 @@ class SessionManager {
 
   set(userId: string, data: WebSocket<UserData>) {
     this.sessions.set(userId, data);
+  }
+
+  send(
+    userId: string,
+    message: RecognizedString,
+    isBinary?: boolean,
+    compress?: boolean,
+  ): number | undefined {
+    return this.sessions.get(userId)?.send(message, isBinary, compress);
   }
 
   delete(userId: string) {
