@@ -74,8 +74,10 @@ export const handlers: WsHandlers = {
         );
       });
     } catch (er) {
-      res.writeStatus('401');
-      res.end(JSON.stringify({ error: 'authorization is failed' }));
+      res
+        .writeStatus('401')
+        .writeHeader('Content-Type', 'application/json')
+        .end(JSON.stringify({ error: 'authorization is failed' }));
     }
   },
 };

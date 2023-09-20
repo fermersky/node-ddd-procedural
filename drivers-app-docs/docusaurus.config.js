@@ -69,16 +69,16 @@ const config = {
       },
       navbar: {
         title: 'Driver App',
-        logo: {
-          alt: 'My Site Logo',
-          src: 'img/logo.svg',
-        },
+        // logo: {
+        //   alt: 'My Site Logo',
+        //   src: 'img/logo.svg',
+        // },
         items: [
           {
             type: 'docSidebar',
             sidebarId: 'mySidebar',
             position: 'left',
-            label: 'Tutorial',
+            label: 'API docs',
           },
           // { to: '/blog', label: 'Blog', position: 'left' },
           {

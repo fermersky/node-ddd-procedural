@@ -5,8 +5,28 @@ slug: /
 
 # Incoming WebSocket events
 
-The list below represents available requests payload. All events have common incoming and outgoing
-body structure.
+**WS endpoint: `ws(s)://<host>/ws`**
+
+## Establishing a connetion
+
+In order to initialize a WebSocket connection, you need to provide a JWT token in an upgrade HTTP request.
+
+```text title="HTTP upgrade request"
+Connection: Upgrade
+Upgrade: WebSocket
+
+<other websocket headers>
+
+Authorization: Bearer eyJhbGciOi[...]8vWA3qpie5t9klgmo
+```
+
+**Use [/driver/login](http://localhost:3000/http#login) endpoint to get a token.**
+
+Otherwise connection will be terminated with <Highlight color='crimson'>401 Unauthorized</Highlight> HTTP status code.
+
+## Events
+
+The list below represents available requests payload. All events have common incoming and outgoing body structure.
 
 Incoming body structure looks like:
 
@@ -41,7 +61,7 @@ a _request-response_ way.
 
 Get all available drivers in the database. Supports pagination.
 
-```json
+```json title="Example input"
 {
   "query": "getAllDrivers",
   "params": {
@@ -53,9 +73,7 @@ Get all available drivers in the database. Supports pagination.
 
 > _param **take** of type `Number` - size of the array of drivers._ <br/> _param **skip** of type `Number` - count of records to skip._
 
-#### Example output:
-
-```json
+```json title="Example output"
 {
   "data": [
     {
@@ -85,7 +103,7 @@ HTTP `/login` endpoint is used for recieving credentials.
 {/* TODO: create docs for http get /login */}
 {/* TODO: describe in docs how to connect to WS with jwt in headers */}
 
-```json
+```json title="Example input"
 {
   "query": "me",
   "params": {
@@ -96,9 +114,7 @@ HTTP `/login` endpoint is used for recieving credentials.
 
 > _param **token** of type `String` - JWT authorization token used to establish WS connection._
 
-#### Example output:
-
-```json
+```json title="Example output"
 {
   "data": {
     "id": "9495f3b5-4075-4c47-9919-e7bc45da171d",

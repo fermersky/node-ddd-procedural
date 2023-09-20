@@ -19,11 +19,23 @@ const sidebars = {
   mySidebar: [
     {
       type: 'category',
-      label: 'WebSocket Events',
+      label: '🚀 HTTP',
+      link: { type: 'doc', id: 'http' },
+      items: [
+        {
+          type: 'link',
+          label: 'Login',
+          href: '/http#login',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: '🔥 WebSocket Events',
       items: [
         {
           type: 'category',
-          label: 'Incoming',
+          label: '↔️ Incoming',
           link: { type: 'doc', id: 'incoming' },
           items: [
             {
@@ -41,14 +53,14 @@ const sidebars = {
         {
           type: 'doc',
           id: 'outgoing',
-          label: 'Outgoing',
-        },
-        {
-          type: 'doc',
-          id: 'markdown-features',
-          label: 'Markdown features',
+          label: '⬅️ Outgoing',
         },
       ],
+    },
+    {
+      type: 'doc',
+      id: 'markdown-features',
+      label: 'Markdown features',
     },
   ],
 };

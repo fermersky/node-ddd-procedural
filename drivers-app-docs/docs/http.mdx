@@ -1,0 +1,28 @@
+---
+slug: /http
+---
+
+# HTTP Endpoints
+
+This section outlines the various HTTP endpoints available in the application.
+Each endpoint serves a specific function and can be accessed via HTTP requests.
+
+## Login
+
+Driver login. Accepts driver **email** and **password**. Sends a JWT token as a response.
+
+> Method: `POST`<br/>
+> Endpoint: `https://<host>/driver/login`
+
+```json title="Example request"
+{
+  "email": "andrew@mail.com",
+  "password": "123"
+}
+```
+
+```json title="Example response"
+{
+  "token": "ekc7byInjcKxgd[...]ZDS4VprfvgKD3J4oGFfjWDQzbTc"
+}
+```
