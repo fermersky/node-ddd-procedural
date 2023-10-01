@@ -15,10 +15,10 @@ export interface IWsIncomingMessage {
   query: string;
 }
 
-export interface IWsHandlerResult<TSchema, Q> {
+export interface IWsHandlerResult<TSchema, TEvent> {
   status: number;
   data: TSchema;
-  event: Q;
+  event: TEvent;
 }
 
 export type WsHandlerResult<T, Q> = Promise<IWsHandlerResult<T, Q>>;
